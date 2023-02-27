@@ -3,6 +3,7 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import MarvelService from '../../services/MarvelService';
 import './charList.scss';
+import PropTypes from 'prop-types';
 
 class CharList extends Component {
 
@@ -13,7 +14,7 @@ class CharList extends Component {
         newItemLoading: false,
         offset: 210,
         charEnded: false,
-        activeChar: null
+        activeChar: 1010338
     }
     
     marvelService = new MarvelService();
@@ -66,14 +67,15 @@ class CharList extends Component {
             }
             return (
                 <li 
-                    onClick={() => {
+                    onFocus={() => {
                         this.setState({
                             activeChar: item.id
                         })
                         this.props.onCharSelected(item.id);
                     }}
                     className={this.state.activeChar === item.id ? 'char__item char__item_selected' : 'char__item' }
-                    key={item.id}>
+                    key={item.id}
+                    tabIndex={0}        >
                         <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                         <div className="char__name">{item.name}</div>
                 </li>
@@ -111,6 +113,10 @@ class CharList extends Component {
             </div>
         )
     }
+}
+
+CharList.propTypes = {
+    onCharSelected: PropTypes.func.isRequired
 }
 
 export default CharList;
