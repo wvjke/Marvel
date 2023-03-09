@@ -1,67 +1,40 @@
 import './charInfo.scss';
-import { Component } from 'react';
-import MarvelService from '../../services/MarvelService';
+import { useEffect, useState } from 'react';
+import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-class CharInfo extends Component {
+const CharInfo = (props) => {
 
-    state = {
-        char: null,
-        loading: false,
-        error: false
-    }
+    const [char, setChar] = useState(null);
 
-    marvelService = new MarvelService();
+    const {loading, error, getCharacter, clearError} = useMarvelService();
 
-    componentDidMount() {
-        this.updateChar();
-    }
+    useEffect(() => {
+        updateChar();
+    }, [])
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.props.charId !== prevProps.charId){
-            this.updateChar();
-        }
-    }
+    useEffect(() => {
+        updateChar();
+    }, [props.charId])
 
 
-    updateChar = () => {
-        const {charId} = this.props;
+    const updateChar = () => {
+        const {charId} = props;
         if (!charId) {
             return;
         }
-
-        this.onCharLoading();
-
-        this.marvelService
-            .getCharacter(charId)
-            .then(this.onCharLoaded)
-            .catch(this.onError)
+        clearError();
+        getCharacter(charId)
+            .then(onCharLoaded)
     }
 
-    onCharLoaded = (char) => {
-        this.setState({char, loading: false})
+    const onCharLoaded = (char) => {
+        setChar(char);
    }
-
-   onError = () => {
-    this.setState({
-        loading: false,
-        error: true
-    })
-   }
-
-   onCharLoading = () => {
-    this.setState({
-        error: false,
-        loading: true
-    })
-   }
-
-    render () {
-
-        const {char, loading, error} = this.state;
 
         const skeleton = char || loading || error ? null : <Skeleton/>;
         const errorMessage = error ? <ErrorMessage/> : null;
@@ -76,7 +49,7 @@ class CharInfo extends Component {
                 {content}
             </div>
         )
-    }
+
 }
 
 const View = ({char}) => {
@@ -109,12 +82,12 @@ const View = ({char}) => {
             {comics.length > 0 ? null: 'There is no comics with this character'}
             {
                 comics.map((item, i) => {
-                    // eslint-disable-next-line
+                    const id = +item.resourceURI.substr(43);
                     if (i > 9) return;
                     return (
-                        <li key={i} className="char__comics-item">
+                        <Link to={`/comics/${id}`} key={id} className="char__comics-item">
                             {item.name}
-                        </li>
+                        </Link>
                     )
                 })
             }
