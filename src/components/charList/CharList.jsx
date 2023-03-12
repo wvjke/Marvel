@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import Spinner from '../spinner/Spinner';
+import { CSSTransition, TransitionGroup} from 'react-transition-group';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import useMarvelService from '../../services/MarvelService';
 import './charList.scss';
@@ -40,7 +41,7 @@ const CharList = (props) => {
 
     const setActiveItemSessionStorage = (id) => {
         const activeItem = charList.filter(item => item.id == id)
-        const setStorage = sessionStorage.setItem('activeItem', activeItem[0].id);
+        sessionStorage.setItem('activeItem', activeItem[0].id);
     }
 
 
@@ -52,24 +53,28 @@ const CharList = (props) => {
                 imgStyle = {'objectFit' : 'unset'};
             }
             return (
-                <li 
-                    onFocus={() => {
-                        setActiveItemSessionStorage(item.id);
-                        setActiveChar(item.id);
-                        props.onCharSelected(item.id);
-                    }}
-                    className={activeChar == item.id ? 'char__item char__item_selected' : 'char__item' }
-                    key={item.id}
-                    tabIndex={0}        >
-                        <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
-                        <div className="char__name">{item.name}</div>
-                </li>
+                <CSSTransition key={item.id} timeout={500} classNames="char__item">
+                    <li 
+                        onFocus={() => {
+                            setActiveItemSessionStorage(item.id);
+                            setActiveChar(item.id);
+                            props.onCharSelected(item.id);
+                        }}
+                        className={activeChar == item.id ? 'char__item char__item_selected' : 'char__item' }
+                        key={item.id}
+                        tabIndex={0}        >
+                            <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
+                            <div className="char__name">{item.name}</div>
+                    </li>
+                </CSSTransition>
             )
         });
 
         return (
             <ul className="char__grid">
+                <TransitionGroup component={null}>
                 {items}
+                </TransitionGroup>
             </ul>
         )
     }

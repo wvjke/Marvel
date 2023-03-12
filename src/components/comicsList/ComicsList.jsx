@@ -1,6 +1,4 @@
 import './comicsList.scss';
-import uw from '../../resources/img/UW.png';
-import xMen from '../../resources/img/x-men.png';
 import useMarvelService from '../../services/MarvelService';
 import { useEffect, useState} from 'react';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -43,7 +41,7 @@ const ComicsList = () => {
     function renderItems (arr)  {
         const items =  arr.map((item, i) => {
             return (
-                <li className="comics__item" key={i}>
+                <li className="comics__item" key={i} item="comic">
                     <Link to={`/comics/${item.id}`}>
                         <img src={item.thumbnail} alt="ultimate war" className="comics__item-img"/>
                         <div className="comics__item-name">{item.title}</div>
@@ -67,7 +65,7 @@ const ComicsList = () => {
     const spinner = loading && !newItemLoading ? <Spinner/> : null;
     
     return (
-        <div className="comics__list">
+        <div className="comics__list" item="comic">
                 {errorMessage}
                 {spinner}
                 {items}
