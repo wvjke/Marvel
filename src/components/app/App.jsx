@@ -1,8 +1,7 @@
 import { lazy , Suspense} from "react";
 import AppHeader from "../appHeader/AppHeader";
-import { BrowserRouter as Router, Route, Routes, NoMatch} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Spinner from "../spinner/Spinner";
-import AppBanner from "../appBanner/AppBanner";
 
 const Page404 = lazy(() => import('../pages/404'));
 const MainPage = lazy(() => import('../pages/MainPage'));
