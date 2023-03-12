@@ -4,7 +4,10 @@ import { useNavigate, Link } from 'react-router-dom';
 const SingleCharacterLayout = ({data}) => {
 
     const {name, description, thumbnail} = data;
+
     const navigate = useNavigate();
+
+    
 
     return (
         <div className="single-comic">
