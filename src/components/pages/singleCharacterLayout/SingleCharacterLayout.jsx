@@ -1,13 +1,11 @@
 import './singleCharacterLayout.scss';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 const SingleCharacterLayout = ({data}) => {
 
     const {name, description, thumbnail} = data;
 
-    const navigate = useNavigate();
-
-    
+   
 
     return (
         <div className="single-comic">
@@ -23,7 +21,7 @@ const SingleCharacterLayout = ({data}) => {
                 <h2 className="single-comic__name">{name}</h2>
                 <p className="single-comic__descr">{description}</p>
             </div>
-            <Link to={navigate(-1)} className="single-comic__back">Back</Link>
+            <Link to="/" className="single-comic__back">Back</Link>
         </div>
     )
 }
